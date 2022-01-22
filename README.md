@@ -1,6 +1,6 @@
 # swift-testable-fatal-error
 
-## TestableFatalError
+## How to use `expectFatalError()`
 
 ```swift
 func test_empty_MyCollection_raises_fatalError_when_accessing_element_before_startIndex() {
