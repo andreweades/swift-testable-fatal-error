@@ -2,7 +2,6 @@
 // Andrew Eades, January 2022
 
 import Foundation
-import XCTest
 
 // NB Testing Swift standard library does not seem to work
 // as it must be ensuring that it calls Swift.fatalError
