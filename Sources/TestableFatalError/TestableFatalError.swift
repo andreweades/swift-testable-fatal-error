@@ -26,32 +26,29 @@ public struct TestableFatalError {
   }
 }
 
-extension XCTestCase {
-  public func expectFatalError(
-    timeout: TimeInterval = 0.1,
-    testCase: @escaping () -> Void,
-    withMessage didRaiseFatalErrorWithMessage: @escaping (String?, Error?) -> Void
-  ) {
-    
-    let expectation = expectation(description: "expected fatalError()")
-    var actual: String? = nil
-    
-    TestableFatalError.onFatalError { message, _, _ in
-      actual = message
-      expectation.fulfill()
-      _neverReturn()
-    }
-    
-    DispatchQueue.global(qos: .userInteractive).async {
-      testCase()
-    }
-    
-    waitForExpectations(timeout: timeout) {error in
-      
-      didRaiseFatalErrorWithMessage(actual, error)
-      
-      TestableFatalError.fatalErrorDidComplete()
-    }
+public func XCTestExpectFatalError(
+  timeout: TimeInterval = 0.1,
+  testCase: @escaping () -> Void,
+  withMessage didRaiseFatalErrorWithMessage: @escaping (String?, Error?) -> Void
+) {
+  let expectation = expectation(description: "expected fatalError()")
+  var actual: String? = nil
+
+  TestableFatalError.onFatalError { message, _, _ in
+    actual = message
+    expectation.fulfill()
+    _neverReturn()
+  }
+
+  DispatchQueue.global(qos: .userInteractive).async {
+    testCase()
+  }
+
+  waitForExpectations(timeout: timeout) {error in
+
+    didRaiseFatalErrorWithMessage(actual, error)
+
+    TestableFatalError.fatalErrorDidComplete()
   }
 }
 
